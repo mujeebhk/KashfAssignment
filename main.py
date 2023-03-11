@@ -57,11 +57,27 @@ class Main:
         #Check the station of all other trains
         #If any other train is in the station already then loop back and select a random station again
         
+    def findConnection(train):
+        for i in range (0, len(connections)):
+            connection = connections[i]
+            if (connection.dir == train.cr_dir and connection.fr_st==train.cr_st):
+                return connection
+        
+        train.cr_dir = Main.opposite_of(train.cr_dir)
+        for i in range (0, len(connections)):
+            connection = connections[i]
+            if (connection.dir == train.cr_dir and connection.fr_st==train.cr_st):
+                return connection
+
+
         
     def simulate(trains):
         for i in range (0, len(trains)):
-            print()
-    return ""
+            connection = Main.findConnection(trains[i])
+            print(connection)
+            trains[i].cr_stn = connection.to_st
+            trains[i].cr_dir = connection.dir
+ 
             
         
 def main():
