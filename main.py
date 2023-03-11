@@ -58,8 +58,11 @@ class Main:
         #If any other train is in the station already then loop back and select a random station again
         
         
-    def simulate(stations,connections,trains):
-        pass        
+    def simulate(trains):
+        for i in range (0, len(trains)):
+            print()
+    return ""
+            
         
 def main():
     d={}
@@ -88,6 +91,7 @@ def main():
     #Loop to no_of_trains .. each time crate train object. 
     #Randomly select the station
     #Store in Trains List
+    global trains
     trains=[]
     temp_connections = connections
     for i in range (0, int(no_of_trains)):
@@ -115,7 +119,7 @@ def main():
             
             #Invoke a method called simulate
             #Pass list of trains and list of stations  and list of tracks as parameter
-            
+            simulate()
             """delay=random.random()
             if delay==True:
                 d[train].append("D")
