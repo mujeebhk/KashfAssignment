@@ -13,6 +13,8 @@ import copy
 from collections import defaultdict
 
 class Main:
+    """_summary_
+    """
     
     def load_stations(stations_file):
         """

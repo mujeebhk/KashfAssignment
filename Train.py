@@ -6,6 +6,10 @@ Created on Fri Mar 10 16:41:36 2023
 """
 
 class Train:
+    """_summary_
+    """
+
+
     def __init__(self,number,current_station,current_direction,line):
         self.number=number
         self.cr_st=current_station

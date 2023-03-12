@@ -6,6 +6,9 @@ Created on Fri Mar 10 16:33:49 2023
 """
 
 class Station:
+    """_summary_
+    """
+
     def __init__(self,Name,Delay_prob):
         self.name=Name
         self.delay_prob=Delay_prob

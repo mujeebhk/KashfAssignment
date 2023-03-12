@@ -6,6 +6,9 @@ Created on Fri Mar 10 16:43:51 2023
 """
 
 class Connection:
+    """_summary_
+    """
+
     def __init__(self,From_station,To_station,Color,Direction):
         self.dir=Direction
         self.fr_st=From_station
