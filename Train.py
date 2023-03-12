@@ -14,7 +14,16 @@ class Train:
         
 
     def __str__(self):
-      return f"Train Status: Train {self.number}, on {self.line} line, is at station {self.cr_st}, heading in {self.cr_dir} direction\n"
-  
+        if self.cr_dir=='N':
+            return f" Train {self.number}, on {self.line} line, is at station {self.cr_st}, heading in {self.cr_dir}orth direction"
+        else:
+            return f" Train {self.number}, on {self.line} line, is at station {self.cr_st}, heading in {self.cr_dir}outh direction"
+        
+            
     def __repr__(self):
-      return f"Train Status: Train {self.number}, on {self.line} line, is at station {self.cr_st}, heading in {self.cr_dir} direction\n"
+        if self.cr_dir=='N':
+            return f"Train {self.number}, on {self.line} line, is at station {self.cr_st}, heading in {self.cr_dir}orth direction"
+        else:
+            return f" Train {self.number}, on {self.line} line, is at station {self.cr_st}, heading in {self.cr_dir}outh direction"
+        
+            
