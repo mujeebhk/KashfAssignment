@@ -71,12 +71,24 @@ class Main:
 
 
         
+    def findStationByName(name):
+        for i in stations:
+            if i.name == name:
+                return i
+
+
     def simulate(trains):
         for i in range (0, len(trains)):
-            connection = Main.findConnection(trains[i])
-            print(connection)
-            trains[i].cr_stn = connection.to_st
-            trains[i].cr_dir = connection.dir
+
+            tempTrain=trains[i]
+            tempStation = Main.findStationByName(tempTrain.cr_st)
+            connection = Main.findConnection(tempTrain)
+            if Main.random_delay(tempStation.delay_prob):
+                print("Train delayed", tempTrain)
+            else:
+                
+                trains[i].cr_stn = connection.to_st
+                trains[i].cr_dir = connection.dir
             print(connection)
  
     def random_delay(probability):
@@ -107,7 +119,8 @@ def main():
             break
         
         
-    no_of_trains=input("Enter how many trains to simulate:")
+    #no_of_trains=input("Enter how many trains to simulate:")
+    no_of_trains=3
     global trains
     trains=[]
     temp_connections = connections
@@ -119,6 +132,7 @@ def main():
         
         #tempTrain.cr_st =temp_connection.fr_st
         #tempTrain.cr_dir =temp_connection.dir
+        print("Connection assigned to ", tempTrain)
         trains.append(tempTrain)
     
     print(trains)
@@ -127,23 +141,25 @@ def main():
         print("Continue simulation [1], train info [2], exit [q]")
         option=input("Select an option:")
         if option=='1':
-            train_number=int(input("Which train (1-",no_of_trains))
-            delay=Main.random_delay()
+            #train_number=int(input("Which train (1-",no_of_trains))
+            train_number=1
+            
+            """delay=Main.random_delay()
             if delay==True:
                 pass
                 #display delay
-            else:
-                Main.simulate(trains[train_number])
-            break
+            else:"""
+            Main.simulate(trains)
+            continue
             
            #Invoke a method called simulate
            #Pass list of trains and list of stations  and list of tracks as parameter     
                 
                 
         elif option=='2':
-            trainNumber=input("Which train (1 - 3):")
-            print(trains[trainNumber])
-            break
+            trainNumber=int(input("Which train (1 - 3):"))
+            print(trains[trainNumber-1])
+            continue
             
         elif option=='q' or option=='Q':
             print("Thank you and Goodbye")
