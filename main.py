@@ -48,7 +48,7 @@ class Main:
             pass
 """
     def get_random_connection(connection_list):
-        
+        global random_connection
         random_connection=random.choice(connection_list)
         connection_list.remove(random_connection)
         print("Random track selected is ",random_connection)
@@ -77,8 +77,12 @@ class Main:
             print(connection)
             trains[i].cr_stn = connection.to_st
             trains[i].cr_dir = connection.dir
+            print(connection)
  
-            
+    def random_delay(probability):
+      return random.random() < probability  
+
+             
         
 def main():
     d={}
@@ -104,9 +108,6 @@ def main():
         
         
     no_of_trains=input("Enter how many trains to simulate:")
-    #Loop to no_of_trains .. each time crate train object. 
-    #Randomly select the station
-    #Store in Trains List
     global trains
     trains=[]
     temp_connections = connections
@@ -121,42 +122,37 @@ def main():
         trains.append(tempTrain)
     
     print(trains)
-
-        
-        
-        
-    
-    
     
     while True:
         print("Continue simulation [1], train info [2], exit [q]")
         option=input("Select an option:")
-        if option==1:
-            
-            #Invoke a method called simulate
-            #Pass list of trains and list of stations  and list of tracks as parameter
-            simulate()
-            """delay=random.random()
+        if option=='1':
+            train_number=int(input("Which train (1-",no_of_trains))
+            delay=Main.random_delay()
             if delay==True:
-                d[train].append("D")
+                pass
+                #display delay
             else:
-                if d[train][1]==connections[random_train][1]:
-                    train=[connections[random_train+1][2],connections[random_train+1][0],direction]
-                """
+                Main.simulate(trains[train_number])
+            break
+            
+           #Invoke a method called simulate
+           #Pass list of trains and list of stations  and list of tracks as parameter     
                 
                 
-                
-        elif option==2:
+        elif option=='2':
             trainNumber=input("Which train (1 - 3):")
-            #train_info(trains, trainNumber)
+            print(trains[trainNumber])
+            break
             
         elif option=='q' or option=='Q':
+            print("Thank you and Goodbye")
             break
         else:
             print("Invalid input")
             continue
         
-        
+    
         
     ''' 
                  
@@ -172,6 +168,13 @@ def main():
                 print("Delay")
                 
     '''     
+    """delay=random.random()
+    if delay==True:
+        d[train].append("D")
+    else:
+        if d[train][1]==connections[random_train][1]:
+            train=[connections[random_train+1][2],connections[random_train+1][0],direction]
+        """
 
 
 
