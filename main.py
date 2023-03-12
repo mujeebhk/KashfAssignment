@@ -57,19 +57,33 @@ class Main:
         #Check the station of all other trains
         #If any other train is in the station already then loop back and select a random station again
         
-    def findConnection(train):
+    def findConnectionByTrain(train):
+        for i in connections:
+            if i.dir==train.cr_dir and i.fr_st==train.cr_st:
+                return i
+            elif i.dir==Main.opposite_of(train.cr_dir) and i.fr_st==train.cr_st:
+                return i
+            '''
         for i in range (0, len(connections)):
             connection = connections[i]
+            print(connection)
             if (connection.dir == train.cr_dir and connection.fr_st==train.cr_st):
+                print(connection)
                 return connection
-        
+            elif (connection.dir == Main.opposite_of(train.cr_dir) and connection.fr_st==train.cr_st):
+                return connection
+            '''
+            
+    ''' 
         train.cr_dir = Main.opposite_of(train.cr_dir)
         for i in range (0, len(connections)):
             connection = connections[i]
+            print(connection)
             if (connection.dir == train.cr_dir and connection.fr_st==train.cr_st):
+                print(connection)
                 return connection
-
-
+            '''
+        
         
     def findStationByName(name):
         for i in stations:
@@ -79,17 +93,16 @@ class Main:
 
     def simulate(trains):
         for i in range (0, len(trains)):
-
             tempTrain=trains[i]
             tempStation = Main.findStationByName(tempTrain.cr_st)
-            connection = Main.findConnection(tempTrain)
+            connection = Main.findConnectionByTrain(tempTrain)
             delay_prob=float(tempStation.delay_prob.strip())
+            
             if Main.random_delay(delay_prob):
                 print("Train delayed", tempTrain)
-            else:
-                
-                trains[i].cr_stn = connection.to_st
-                trains[i].cr_dir = connection.dir
+            else: 
+                trains[i].cr_stn = i.to_st
+                trains[i].cr_dir = i.dir#connection.dir
             print(connection)
  
     def random_delay(probability):
