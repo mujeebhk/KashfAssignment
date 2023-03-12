@@ -14,8 +14,7 @@ class Train:
         
 
     def __str__(self):
-        return f"Train: name is {self.number},  Current Station is  {self.cr_st}, direction is  {self.cr_dir}, line is  {self.line}"
-    
+      return f"From str method of Test: Train {self.number}, on {self.line} line, is at station {self.cr_st}, heading in {self.cr_dir} direction"
+  
     def __repr__(self):
-        return f"Train: name is {self.number},  Current Station is  {self.cr_st}, direction is  {self.cr_dir}, line is  {self.line}"
-    
+      return f"From str method of Test: Train {self.number}, on {self.line} line, is at station {self.cr_st}, heading in {self.cr_dir} direction"
