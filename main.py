@@ -14,6 +14,12 @@ import copy
 class Main:
     
     def load_stations(stations_file):
+        """_summary_
+
+        Args:
+            stations_file (_type_): _description_
+        """
+        
         '''
         Loading data from the stations file into a list of objects
         '''
@@ -26,6 +32,11 @@ class Main:
    
     
     def load_connections(connections_file):
+        """_summary_
+
+        Args:
+            connections_file (_type_): _description_
+        """
         '''
         Loading data from the stations file into a list of objects
         '''
@@ -34,14 +45,26 @@ class Main:
         with open(connections_file,'r') as cn:
             for j in cn.readlines():
                 split_list=j.split(',')
-                split_list[3]=split_list[3].strip() #Removing the new-line character
-            #Appending existing connections from the file
+
+                #Removing the new-line character
+                split_list[3]=split_list[3].strip() 
+
+                #Appending existing connections from the file
                 connections.append(Connection(split_list[0],split_list[1],split_list[2],split_list[3]))
-            #Appending connections for opposite directions(for after train reaches final destination and has to change direction)
+
+                #Appending connections for opposite directions(for after train reaches final destination and has to change direction)
                 connections.append(Connection(split_list[1],split_list[0],split_list[2],Main.opposite_of(split_list[3]))) 
         
             
     def opposite_of(direction):
+        """_summary_
+
+        Args:
+            direction (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         '''
         Changing direction to opposite direction
 
@@ -55,6 +78,14 @@ class Main:
                
 
     def get_random_connection(connection_list):
+        """_summary_
+
+        Args:
+            connection_list (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         '''
         Choosing current position of train using random
         '''
@@ -67,6 +98,14 @@ class Main:
         
         
     def findConnectionByTrain(train):
+        """_summary_
+
+        Args:
+            train (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         '''
         Finding the connection corresponding to the train
         '''
@@ -84,6 +123,14 @@ class Main:
            
                
     def findStationByName(name):
+        """_summary_
+
+        Args:
+            name (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         '''
         Finding the Station from the stations list  corresponding to the current station in train
         '''
@@ -93,6 +140,14 @@ class Main:
   
             
     def random_delay(probability):
+        """_summary_
+
+        Args:
+            probability (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         '''
         Checking for delay with random and probabilty of delay for station
         '''
@@ -100,6 +155,8 @@ class Main:
 
 
     def simulate():
+        """_summary_
+        """
         '''
         Changes the postiton of the given train according to its current position and delay probabilty
         '''
@@ -118,9 +175,10 @@ class Main:
         
  
 def main():
-    '''
-    main
-    '''   
+    """
+        Starting point for Python to start execution of this program.
+    """
+      
     while True:
         stations_filename=input("Enter name of stations file:")
         try:
@@ -164,5 +222,6 @@ def main():
         else:
             print("Invalid input") #Error Handling
             continue
+
 
 main()
