@@ -83,7 +83,8 @@ class Main:
             tempTrain=trains[i]
             tempStation = Main.findStationByName(tempTrain.cr_st)
             connection = Main.findConnection(tempTrain)
-            if Main.random_delay(tempStation.delay_prob):
+            delay_prob=float(tempStation.delay_prob.strip())
+            if Main.random_delay(delay_prob):
                 print("Train delayed", tempTrain)
             else:
                 
