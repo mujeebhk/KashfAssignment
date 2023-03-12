@@ -4,6 +4,7 @@ Created on Wed Mar  1 11:14:36 2023
 Project Trains
 @author: kashf
 """
+#Importing all necessary class and standard libraries
 from Station import Station
 from Train import Train 
 from Connection import Connection
@@ -12,32 +13,39 @@ import copy
 
 class Main:
     
-    
     def load_stations(stations_file):
+        '''
+        Loading data from the stations file into a list of objects
+        '''
         with open(stations_file,'r') as st:
-            global stations
+            global stations #Making the variable global for enabling its use throughout the program
             stations=[]
             for i in st.readlines():
                split_list =  i.split(',')
-               stations.append(Station(split_list[0], split_list[1]))
-            print (str(x) for x in stations)
-            print(stations)
+               stations.append(Station(split_list[0], split_list[1])) #Appending objects to list
    
+    
     def load_connections(connections_file):
-        global connections
+        '''
+        Loading data from the stations file into a list of objects
+        '''
+        global connections #Making the variable global for enabling its use throughout the program
+        connections=[]
         with open(connections_file,'r') as cn:
-            connections=[]
             for j in cn.readlines():
                 split_list=j.split(',')
-                print(split_list)
-                split_list[3]=split_list[3].strip()
+                split_list[3]=split_list[3].strip() #Removing the new-line character
+            #Appending existing connections from the file
                 connections.append(Connection(split_list[0],split_list[1],split_list[2],split_list[3]))
-                connections.append(Connection(split_list[1],split_list[0],split_list[2],Main.opposite_of(split_list[3])))
-                print(len(connections))
-            print("test")
-            print(connections)
-                
+            #Appending connections for opposite directions(for after train reaches final destination and has to change direction)
+                connections.append(Connection(split_list[1],split_list[0],split_list[2],Main.opposite_of(split_list[3]))) 
+        
+            
     def opposite_of(direction):
+        '''
+        Changing direction to opposite direction
+
+        '''
         new_direction=''
         if direction=='N' or direction=='N\n':
             new_direction='S'
@@ -45,135 +53,116 @@ class Main:
             new_direction='N'
         return new_direction
                
-    """def read_map():
-        for i in connections:
-            pass
-"""
+
     def get_random_connection(connection_list):
-        connection_list_temp = copy.deepcopy(connection_list)
-        global random_connection
-        random_connection=random.choice(connection_list_temp)
-        connection_list_temp.remove(random_connection)
-        print("Random track selected is ",random_connection)
+        '''
+        Choosing current position of train using random
+        '''
+        connection_list_temp = copy.deepcopy(connection_list) #Making a copy of connections for further alterations
+        global random_connection #Making the variable global for enabling its use throughout the program
+        random_connection=random.choice(connection_list_temp) #Choosing a random connection from the list
+        #Removing the above chosen connection to make sure no two trains are on the same randomly chosen position
+        connection_list_temp.remove(random_connection) 
         return random_connection
-        #Select a random train station
-        #Check the station of all other trains
-        #If any other train is in the station already then loop back and select a random station again
+        
         
     def findConnectionByTrain(train):
+        '''
+        Finding the connection corresponding to the train
+        '''
         for i in range (0, len(connections)):
             connection = connections[i]
-            #print(connection)
+            #Checking if the direction and station of the train and connection are same
             if (connection.dir == train.cr_dir and connection.fr_st==train.cr_st):
-                #print(connection)
                 return connection
-
-        train.cr_dir = Main.opposite_of(train.cr_dir)
+        train.cr_dir = Main.opposite_of(train.cr_dir) #Invoking the opposite_of function
         for i in range (0, len(connections)):
             connection = connections[i]
-            #print(connection)
+            #Checking if the station and opposite direction of the train and connection are same
             if (connection.dir == train.cr_dir and connection.fr_st==train.cr_st):
-                #print(connection)
                 return connection
            
-        
-        
+               
     def findStationByName(name):
+        '''
+        Finding the Station from the stations list  corresponding to the current station in train
+        '''
         for i in stations:
             if i.name == name:
                 return i
+  
+            
+    def random_delay(probability):
+        '''
+        Checking for delay with random and probabilty of delay for station
+        '''
+        return random.random() < probability  
 
 
     def simulate():
+        '''
+        Changes the postiton of the given train according to its current position and delay probabilty
+        '''
         for i in range (0, len(trains)):
             tempTrain=trains[i]
-            tempStation = Main.findStationByName(tempTrain.cr_st)
-            connection = Main.findConnectionByTrain(tempTrain)
-            if connection == None:
-                print("Connection not found for train : " , tempTrain)
-                print("List of connections are  : " , connections)
-                
-            delay_prob=float(tempStation.delay_prob.strip())
-            
-            if Main.random_delay(delay_prob):
+            tempStation = Main.findStationByName(tempTrain.cr_st) #Invoking the method findStationByName
+            connection = Main.findConnectionByTrain(tempTrain) #Invoking the method findConnectionByTrain
+            #Taking the delay probability from Stations file according to station name 
+            delay_prob=float(tempStation.delay_prob.strip())            
+            if Main.random_delay(delay_prob): #Invoking the random.delay function to check for delay
                 print("Train delayed", tempTrain)
             else: 
                 trains[i].cr_st = connection.to_st
                 trains[i].cr_dir = connection.dir
-            #print(connection)
-        print(trains)
+                print(trains)
+        
  
-    def random_delay(probability):
-      return random.random() < probability  
-
-             
-        
 def main():
-    d={}
+    '''
+    main
+    '''   
     while True:
-        #stations_filename=input("Enter name of stations file:")
-        stations_filename="stations.txt"
+        stations_filename=input("Enter name of stations file:")
         try:
-            Main.load_stations(stations_filename)
+            Main.load_stations(stations_filename) #Invoking the load_stations method
             break
-        except:
-            print("Invalid input--File Not Found")
-            continue
-        
+        except FileNotFoundError: #Error handling
+            print("File Not Found--Please enter a valid file name")
+            continue       
     while True:
-       # connections_filename=input("Enter name of connections file:")
-        connections_filename="connections.txt"
+        connections_filename=input("Enter name of connections file:")
         try:
-            Main.load_connections(connections_filename)
+            Main.load_connections(connections_filename) #Invoking the load_connections function
             break
-        except:
-            print("Invalid Error--File Not Found" +connections_filename)
+        except FileNotFoundError: #Error handling
+            print("File Not Found--Please enter a valid file name")
             break
         
-        
-    #no_of_trains=input("Enter how many trains to simulate:")
-    no_of_trains=3
-    global trains
+    global no_of_trains #Making the variable global for enabling its use throughout the program
+    no_of_trains=input("Enter how many trains to simulate:")   
+    global trains #Making the variable global for enabling its use throughout the program
     trains=[]
     temp_connections = connections
     for i in range (0, int(no_of_trains)):
-        #tempTrain.number=i+1
-        #Set Train stations
-        temp_connection= Main.get_random_connection(temp_connections)
-        tempTrain = Train(i+1, temp_connection.fr_st, temp_connection.dir, temp_connection.color)
-        
-        #tempTrain.cr_st =temp_connection.fr_st
-        #tempTrain.cr_dir =temp_connection.dir
-        print("Connection assigned to ", tempTrain)
-        trains.append(tempTrain)
-    
-    print(trains)
-    
+        temp_connection= Main.get_random_connection(temp_connections) #Invoking the get_random_connection function
+        tempTrain = Train(i+1, temp_connection.fr_st, temp_connection.dir, temp_connection.color) #Creating a Train class object
+        trains.append(tempTrain) #Appending the object into trains list     
     while True:
         print("Continue simulation [1], train info [2], exit [q]")
         option=input("Select an option:")
-        if option=='1':
-            #train_number=int(input("Which train (1-",no_of_trains))
-            train_number=1
-
-            Main.simulate()
+        if option=='1':#Simulating 
+            train_number=int(input("Which train:")) 
+            Main.simulate() #Invoking the simulate method
             continue
-            
-           #Invoke a method called simulate
-           #Pass list of trains and list of stations  and list of tracks as parameter     
-                
-                
-        elif option=='2':
-            trainNumber=int(input("Which train (1 - 3):"))
-            print(trains[trainNumber-1])
-            continue
-            
-        elif option=='q' or option=='Q':
+        elif option=='2': #Displaying train information
+            trainNumber=int(input("Which train:"))  
+            print(trains[trainNumber-1]) #Printing the informstion for the train number entered
+            continue            
+        elif option=='q' or option=='Q': #--Exit--
             print("Thank you and Goodbye")
-            break
+            break #Exiting the loop        
         else:
-            print("Invalid input")
+            print("Invalid input") #Error Handling
             continue
-
 
 main()
