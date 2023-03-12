@@ -10,6 +10,7 @@ from Train import Train
 from Connection import Connection
 import random
 import copy
+from collections import defaultdict
 
 class Main:
     
@@ -35,6 +36,12 @@ class Main:
             connections_file (Text file): Conatains source station, target station, line and direction.
         """
         
+        edges = [
+        ]
+        global graph
+        graph = defaultdict(list)
+
+
         global connections #Making the variable global for enabling its use throughout the program
         connections=[]
         with open(connections_file,'r') as cn:
@@ -50,6 +57,17 @@ class Main:
                 #Appending connections for opposite directions(for after train reaches final destination and has to change direction)
                 connections.append(Connection(split_list[1],split_list[0],split_list[2],Main.opposite_of(split_list[3]))) 
         
+                edges.append([split_list[0], split_list[1]])
+                #edges.append([split_list[1], split_list[0]])
+            
+            for edge in edges:
+                a, b = edge[0], edge[1]
+         
+                # Creating the graph
+                # as adjacency list
+                graph[a].append(b)
+                graph[b].append(a)
+                
             
     def opposite_of(direction):
         """
@@ -170,7 +188,8 @@ def main():
     """
       
     while True:
-        stations_filename=input("Enter name of stations file:")
+        #stations_filename=input("Enter name of stations file:")
+        stations_filename="stations.txt"
         try:
             Main.load_stations(stations_filename) #Invoking the load_stations method
             break
@@ -178,7 +197,8 @@ def main():
             print("File Not Found--Please enter a valid file name")
             continue       
     while True:
-        connections_filename=input("Enter name of connections file:")
+        #connections_filename=input("Enter name of connections file:")
+        connections_filename="connections.txt"
         try:
             Main.load_connections(connections_filename) #Invoking the load_connections function
             break
@@ -187,7 +207,8 @@ def main():
             break
         
     global no_of_trains #Making the variable global for enabling its use throughout the program
-    no_of_trains=input("Enter how many trains to simulate:")   
+    #no_of_trains=input("Enter how many trains to simulate:")   
+    no_of_trains=3
     global trains #Making the variable global for enabling its use throughout the program
     trains=[]
     temp_connections = connections
@@ -215,6 +236,12 @@ def main():
             start_station=input("Enter a start station")
             end_station=input("Enter an end station")
             time_steps=int(input("Enter time steps"))
+            bsf = BFS_SP(graph, start_station, end_station)
+            if not(bsf == None) and bsf <= time_steps:
+                print("Station Z is reachable from station A within 3 timesteps.")
+            else:
+                print("Station Z is not reachable from station A within 3 timesteps.")
+
            
         elif option=='q' or option=='Q': #--Exit--
             print("Thank you and Goodbye")
@@ -223,6 +250,64 @@ def main():
         else:
             print("Invalid input") #Error Handling
             continue
+
+
+
+
+# Python implementation to find the
+# shortest path in the graph using
+# dictionaries
+ 
+# Function to find the shortest
+# path between two nodes of a graph
+def BFS_SP(graph, start, goal):
+    explored = []
+     
+    # Queue for traversing the
+    # graph in the BFS
+    queue = [[start]]
+     
+    # If the desired node is
+    # reached
+    if start == goal:
+        print("Same Node")
+        return 0
+     
+    # Loop to traverse the graph
+    # with the help of the queue
+    while queue:
+        path = queue.pop(0)
+        node = path[-1]
+         
+        # Condition to check if the
+        # current node is not visited
+        if node not in explored:
+            neighbours = graph[node]
+             
+            # Loop to iterate over the
+            # neighbours of the node
+            for neighbour in neighbours:
+                new_path = list(path)
+                new_path.append(neighbour)
+                queue.append(new_path)
+                 
+                # Condition to check if the
+                # neighbour node is the goal
+                if neighbour == goal:
+                    print("Shortest path = ", *new_path)
+
+                    return len(new_path)
+            explored.append(node)
+ 
+    # Condition when the nodes
+    # are not connected
+    print("So sorry, but a connecting"\
+                "path doesn't exist :(")
+    return 
+
+
+
+
 
 
 main()
